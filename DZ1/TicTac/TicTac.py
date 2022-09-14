@@ -50,15 +50,15 @@ class TicTac:
             self.step_input(self.validate_input(), self.person_symbol)
 
     def step_input(self, step: tuple, symbol: str):
-        if self.steps:
-            while True:
-                self.steps.remove(step)
-                if self.board[step[0]][step[1]] == self.empty_symbol:
-                    self.board[step[0]][step[1]] = symbol
-                    break
+        if not step:
+            return
+        if self.steps and step in self.steps:
+            self.steps.remove(step)
+            if self.board[step[0]][step[1]] == self.empty_symbol:
+                self.board[step[0]][step[1]] = symbol
 
     def start_game(self):
-        while self.steps != [()]:
+        while self.steps:
             self.show_board()
             self.person_input()
             if self.check_winner(self.person_symbol):
@@ -74,7 +74,6 @@ class TicTac:
         win = [symbol] * self.win_dim
         for i in range(self.dim):
             for k in range(self.dim - self.win_dim + 1):
-                print(win, self.board[i][k:k + self.win_dim])
                 if win == self.board[i][k:k + self.win_dim]:
                     return True
         for j in range(self.dim):
