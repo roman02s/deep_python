@@ -2,14 +2,23 @@
 Tests for TicTacToe game
 """
 import random
-
 import pytest
+from pytest_mock import mocker
+
 from DZ1.TicTac import TicTac
 
 
 @pytest.fixture
-def game():
-    return TicTac.TicTac(computer_symbol="O", person_symbol="X",
+def test_person_input_data():
+    def func():
+        steps = [(i, j) for i in range(3) for j in range(3)]
+        return random.choice(steps)
+    return func
+
+
+@pytest.fixture
+def game(test_person_input_data):
+    return TicTac.TicTac(test_person_input_data, computer_symbol="O", person_symbol="X",
                          empty_symbol="_", dim=3, win_dim=3)
 
 
@@ -29,6 +38,10 @@ def game_full_board(game):
 
 def test_show_board(game):
     game.show_board()
+
+
+def test_validate_input(game):
+    assert game.validate_input() in game.steps
 
 
 def test_computer_input(game):

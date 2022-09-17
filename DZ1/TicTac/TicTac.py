@@ -3,12 +3,14 @@ import random
 
 class TicTac:
     def __init__(self,
+                 input_func,
                  computer_symbol: str = "O",
                  person_symbol: str = "X",
                  empty_symbol: str = "_",
                  dim: int = 3,
                  win_dim: int = 3,
                  ):
+        self.person_input_data = input_func
         self.computer_symbol = computer_symbol
         self.person_symbol = person_symbol
         self.empty_symbol = empty_symbol
@@ -30,7 +32,7 @@ class TicTac:
         print("Ваш ход")
         while True:
             try:
-                step = tuple(map(lambda x: x - 1, list(map(int, input().split()))))
+                step = self.person_input_data()
                 if step in self.steps:
                     return step
                 else:
