@@ -1,4 +1,4 @@
-"TicTacToe game"
+"""TicTacToe game"""
 from TicTac import TicTac
 
 if __name__ == "__main__":

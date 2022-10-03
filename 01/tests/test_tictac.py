@@ -4,7 +4,7 @@ Tests for TicTacToe game
 import random
 
 import pytest
-from DZ1.TicTac import TicTac
+from TicTac import TicTac
 
 
 @pytest.fixture
@@ -60,11 +60,6 @@ def test_step_input(game, step: tuple):
 def test_step_input_full(game: TicTac, step: tuple):
     game.step_input(step, game.computer_symbol)
     assert game.board[step[0]][step[1]] == game.computer_symbol
-
-
-@pytest.mark.xfail
-def test_check_winner_with_clear_board(game):
-    assert game.check_winner(game.computer_symbol)
 
 
 def test_start_game_empty_steps(game):
