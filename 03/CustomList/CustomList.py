@@ -40,7 +40,7 @@ class CustomList(list):
         return self.__add__(other)
 
     def __str__(self) -> str:
-        return super(CustomList, self).__str__() + ", " + f"sum: {self._sum(self)}"
+        return super().__str__() + f", sum: {self._sum(self)}"
 
     def __le__(self, other: TypeList) -> bool:
         return self._sum(self) <= self._sum(other)
