@@ -1,0 +1,2 @@
+class CustomMeta(type):
+    pass
