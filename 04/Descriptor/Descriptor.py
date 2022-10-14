@@ -1,8 +1,4 @@
-from functools import wraps
-
-
 def type_hint(expected_type):
-    @wraps
     def hint(value):
         if isinstance(value, expected_type):
             return
@@ -11,12 +7,8 @@ def type_hint(expected_type):
 
 
 def make_descriptor(expected_type: type):
-    if type(expected_type) is not type:
-        raise TypeError("Invalid type")
-
     def make_type_hint(_expected_type: type):
-        @wraps
-        def hint(value):
+        def hint(_, value):
             if isinstance(value, _expected_type):
                 return
             raise TypeError("Invalid type")
@@ -50,7 +42,7 @@ class Integer(make_descriptor(int)):
 
 
 class PositiveInteger(Integer):
-    def __init__(self, value):
+    def __init__(self, value=int()):
         PositiveInteger.__value_hint(value)
         super().__init__(value)
 
@@ -58,11 +50,8 @@ class PositiveInteger(Integer):
         PositiveInteger.__value_hint(value)
         super().__set__(instance, value)
 
-    def __get__(self, instance, owner):
-        return super().__get__(instance, owner)
-
     @staticmethod
     def __value_hint(value):
-        if value > 0:
+        if value >= 0:
             return
-        raise ValueError(f"Integer not positive")
+        raise ValueError("Integer not positive")
