@@ -21,5 +21,47 @@ class CustomClass(metaclass=CustomMeta):
 
 
 if __name__ == "__main__":
-    CustomClass().some_def_1()
-    CustomClass().some_def_2()
+    CustomClass(12).custom_some_def_1()
+    inst = CustomClass()
+    print(inst.custom_x == 50)
+    print(inst.custom_val == 99)
+    print(inst.custom_line() == 100)
+    print(CustomClass.custom_x == 50)
+    print(str(inst) == "Custom_by_metaclass")
+    inst.dynamic = "added later"
+    print(inst.custom_dynamic == "added later")
+    try:
+        inst.dynamic  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
+
+    try:
+        inst.x  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
+
+    try:
+        inst.val  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
+
+    try:
+        inst.line()  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
+
+    try:
+        inst.yyy  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
+
+    try:
+        CustomClass.x  # ошибка
+        print("False")
+    except AttributeError:
+        print("True")
