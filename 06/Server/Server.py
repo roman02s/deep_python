@@ -89,7 +89,7 @@ class Server(asyncio.Protocol):
             self.transport.write(response.encode())
         
 
-def run_server(host, port):
+def run_server(host: str, port: int):
     loop = asyncio.get_event_loop()
     coro = loop.create_server(Server, host, port)
     server = loop.run_until_complete(coro)
