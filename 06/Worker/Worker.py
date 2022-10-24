@@ -1,56 +1,46 @@
-from typing import Dict
-from urllib.request import urlopen
+from typing import Dict, List, Optional
+import re
+import json
+
+import requests
+from bs4 import BeautifulSoup
+
+from HTMLTextInforation.HTMLTextInformation import HTMLTextInformation
 
 
 class Worker:
+    tags_html = HTMLTextInformation.paragraphs_text_wrappers + HTMLTextInformation.headers
+    special_symbols = HTMLTextInformation.special_symbols
+
     def __init__(self, url: str):
         self.url = url
+        try:
+            html = requests.get(self.url).text
+            self.soup = BeautifulSoup(html, "html5lib")
+        except requests.exceptions.ConnectionError as err:
+            print(f"Error in Worker: {err}")
 
-    def fetch_url(self) -> Dict:
+    def fetch_url(self, k: int = 10) -> Optional[str]:
+        if not self.soup:
+            return None
         result: Dict = {}
-        with urlopen(self.url) as resp:
-            for line in resp:
-                line_decode = line.decode('utf-8').strip().split()
-                for word in line_decode:
-                    if word:
-                        pass
+        list_test = self.soup.text.split()
+        for word in list_test:
+            word = word.strip(self.special_symbols)
+            if word:
+                result[word] = result.get(word, 0) + 1
+        if len(result.items()) < k:
+            k = len(result.items())
+        return json.dumps(
+            dict(sorted(result.items(),
+                        key=lambda item: item[1])[-k:]),
+            ensure_ascii=False,
+        )
 
-            # for line in resp.read().decode('utf-8'):
-            #     print(line)
-            # print(resp.read().decode('utf-8'))
-        return result
-
-
-#
-#
-#
-# URL = "https://ru.wikipedia.org/wiki/Python"
-# N = 100
-#
-#
-# def fetch_url(url):
-#     resp = urlopen(url)
-#     return resp
-#
-#
-# def fetch_batch_urls(url, times):
-#     for _ in range(times):
-#         resp = fetch_url(url)
-#
-#
-# N_THREADS = 10
-#
-#
-# threads = [
-#     threading.Thread(
-#         target=fetch_batch_urls,
-#         args=(URL, N // N_THREADS,),
-#     )
-#     for _ in range(N_THREADS)
-# ]
-#
-# for th in threads:
-#     th.start()
-#
-# for th in threads:
-#     th.join()
+    def get_urls(self) -> Optional[List]:
+        if not self.soup:
+            return None
+        all_urls = [a["href"] for a in self.soup("a") if a.has_attr("href")]
+        regex = r"https?://"
+        good_urls = [url for url in all_urls if re.match(regex, url)]
+        return good_urls

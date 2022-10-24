@@ -1,6 +1,5 @@
-from Worker.Worker import (
-    Worker
-)
+from .Worker import Worker
+
 __all__ = [
     "Worker",
 ]
