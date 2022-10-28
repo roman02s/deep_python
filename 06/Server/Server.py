@@ -1,7 +1,7 @@
 from typing import Optional
 import asyncio
 
-import Worker
+from Worker.Worker import Worker
 
 
 class Server(asyncio.Protocol):
@@ -29,7 +29,8 @@ class Server(asyncio.Protocol):
                 return
             self._buffer, message = b"", ""
             # Обработка сообщения здесь
-            message = self.worker_processing(request)
+            worker = Worker(request[:-1])
+            message = worker.fetch_url()
             code = self.code_ok
         except (ValueError, UnicodeDecodeError, IndexError):
             message = self.error_message + self.sep
@@ -42,7 +43,7 @@ class Server(asyncio.Protocol):
 
     @staticmethod
     def worker_processing(url: str) -> Optional[str]:
-        worker = Worker.Worker(url)
+        worker = Worker(url)
         return worker.fetch_url()
         
 
