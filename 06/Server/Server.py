@@ -29,8 +29,7 @@ class Server(asyncio.Protocol):
                 return
             self._buffer, message = b"", ""
             # Обработка сообщения здесь
-            worker = Worker(request[:-1])
-            message = worker.fetch_url()
+            message = self.worker_processing(request[:-1])
             code = self.code_ok
         except (ValueError, UnicodeDecodeError, IndexError):
             message = self.error_message + self.sep
@@ -38,6 +37,9 @@ class Server(asyncio.Protocol):
         response = f'{code}{self.sep}{message}{self.sep}'
         print(f"{response=}")
         # отправляем ответ
+        self.data_send(response)
+
+    def data_send(self, response) -> None:
         if hasattr(self.transport, "write"):
             self.transport.write(str(response + self.sep).encode())
 

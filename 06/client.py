@@ -1,7 +1,6 @@
 import threading
 import os.path
-from typing import Optional, List, Dict
-from urllib.request import urlopen
+from typing import List, Dict
 
 import click
 

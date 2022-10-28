@@ -6,7 +6,7 @@ RESULT_PARSE_HTML_RU = (
 )
 
 RESULT_PARSE_HTML_EN = (
-    '{"the": 346, "of": 232, "and": 227, '
-    '"to": 151, "mw": 141, "parser": 133, '
-    '"output": 133, "in": 126, "a": 125, "drugs": 94}'
+    '{"the": 346, "of": 232, "and": 227, "to": 151, '
+    '"mw": 143, "a": 134, "parser": 133, '
+    '"output": 133, "in": 126, "drugs": 94}'
 )
