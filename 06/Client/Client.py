@@ -7,9 +7,10 @@ class ClientError(Exception):
 
 
 class Client:
-    BUFSIZE = 1024
+    __bufsize_message = 1024
+    __sep = '\n'
 
-    def __init__(self, host, port, timeout=None):
+    def __init__(self, host: str, port: int, timeout: int = None):
         self.host = host
         self.port = port
         self.timeout = timeout
@@ -21,19 +22,18 @@ class Client:
 
     def read(self):
 
-        data = b""
-
-        while not data.endswith(b"\n\n"):
+        data: bytes = b""
+        while not data.endswith(self.__sep.encode()):
             try:
-                data += self.connection.recv(self.BUFSIZE)
+                data += self.connection.recv(self.__bufsize_message)
             except socket.error as err:
                 raise ClientError(f"Error reading data from socket - {err}")
 
         return data.decode('utf-8')
 
-    def send(self, data):
+    def send(self, data: str):
         try:
-            self.connection.sendall(data)
+            self.connection.sendall(str(data + self.__sep).encode())
         except socket.error as err:
             raise ClientError(f"Error sending data from socket - {err}")
 
@@ -42,5 +42,4 @@ class Client:
             self.connection.close()
         except socket.error as err:
             raise ClientError(f"Error. Do not close the connection - {err}")
-
 

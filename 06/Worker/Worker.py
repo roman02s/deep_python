@@ -19,6 +19,7 @@ class Worker:
         try:
             html = requests.get(self.url).text
             soup = BeautifulSoup(html, "html5lib")
+            soup.find_all(soup, self.tags_html)
             self.soup_text: str = soup.text
         except requests.exceptions.ConnectionError as err:
             print(f"Error in Worker: {err}")

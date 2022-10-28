@@ -1,5 +1,5 @@
 class HTMLTextInformation:
-    special_symbols = r"\|-+=!@'<>?— .,()&^%$#:↑;`~"
+    special_symbols = r"\/|-+=!@'<>?— .,()&^%$#:↑;`~"
 
     headers = [
         "h1", "h2", "h3", "h4", "h5", "h6",

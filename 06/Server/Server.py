@@ -1,54 +1,7 @@
+from typing import Optional
 import asyncio
-from collections import defaultdict
-from copy import deepcopy
 
-
-class StorageDriverError(ValueError):
-    pass
-
-
-class Storage:
-    """Класс для хранения метрик в памяти процесса"""
-
-    def __init__(self):
-        self._data = defaultdict(dict)
-
-    def put(self, key, value, timestamp):
-        self._data[key][timestamp] = value
-
-    def get(self, key):
-
-        if key == '*':
-            return deepcopy(self._data)
-
-        if key in self._data:
-            return {key: deepcopy(self._data.get(key))}
-
-        return {}
-
-
-class StorageDriver:
-    """Класс, предосталяющий интерфейс для работы с хранилищем данных"""
-
-    def __init__(self, storage: Storage):
-        self.storage = storage
-
-    def __call__(self, data: str):
-
-        method, *params = data.split()
-
-        if method == "put":
-            key, value, timestamp = params
-            value, timestamp = float(value), int(timestamp)
-            self.storage.put(key, value, timestamp)
-            return {}
-        elif method == "get":
-            key = params.pop()
-            if params:
-                raise StorageDriverError
-            return self.storage.get(key)
-        else:
-            raise StorageDriverError
+import Worker
 
 
 class Server(asyncio.Protocol):
@@ -62,7 +15,7 @@ class Server(asyncio.Protocol):
         super().__init__()
         self._buffer: bytes = b""
 
-    def connection_made_write(self, transport: asyncio.transports.BaseTransport) -> None:
+    def connection_made(self, transport: asyncio.transports.BaseTransport) -> None:
         self.transport = transport
 
     def data_received(self, data: bytes) -> None:
@@ -74,19 +27,23 @@ class Server(asyncio.Protocol):
             # ждем данных, если команда не завершена символом sep
             if not request.endswith(self.sep):
                 return
-
             self._buffer, message = b"", ""
             # Обработка сообщения здесь
-
+            message = self.worker_processing(request)
             code = self.code_ok
         except (ValueError, UnicodeDecodeError, IndexError):
             message = self.error_message + self.sep
             code = self.code_err
-
         response = f'{code}{self.sep}{message}{self.sep}'
+        print(f"{response=}")
         # отправляем ответ
         if hasattr(self.transport, "write"):
-            self.transport.write(response.encode())
+            self.transport.write(str(response + self.sep).encode())
+
+    @staticmethod
+    def worker_processing(url: str) -> Optional[str]:
+        worker = Worker.Worker(url)
+        return worker.fetch_url()
         
 
 def run_server(host: str, port: int):
@@ -97,7 +54,7 @@ def run_server(host: str, port: int):
     try:
         loop.run_forever()
     except KeyboardInterrupt:
-        pass
+        print("KeyboardInterrupt in run_server")
 
     server.close()
     loop.run_until_complete(server.wait_closed())
