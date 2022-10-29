@@ -9,7 +9,8 @@ from HTMLTextInforation.HTMLTextInformation import HTMLTextInformation
 
 
 class Worker:
-    tags_html = HTMLTextInformation.paragraphs_text_wrappers + HTMLTextInformation.headers
+    tags_html = HTMLTextInformation.paragraphs_text_wrappers + \
+                HTMLTextInformation.headers
     special_symbols = HTMLTextInformation.special_symbols + string.digits
 
     def __init__(self, url: str = ""):

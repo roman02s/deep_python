@@ -7,13 +7,13 @@ import click
 from Client.Client import Client
 
 
-def fetch_url(url):
+def fetch_url(url: str) -> str:
     client = Client("localhost", 8888)
     client.send(url[:-1])
     return client.read()
 
 
-def fetch_batch_urls(url_list):
+def fetch_batch_urls(url_list: List[str]):
     for url in url_list:
         res = fetch_url(url)
         print(res)
@@ -22,15 +22,17 @@ def fetch_batch_urls(url_list):
 @click.command()
 @click.option('--file', default="", help="File containing url")
 @click.option('--M', default=1, help="Number of threads.")
-def send_requests(file: str, m: int, n: int = 10):
+def send_requests(file: str, m: int, n: int = 10) -> None:
+    """
+    Отправка запросов с url, взятыми из файла file серверу по TCP в m потоков
+    """
     if not os.path.isfile(file):
         print("File not exist")
         return None
     urls: List[str] = []
-    with open(file, "r") as _file:
+    with open(file, "r", encoding="utf-8") as _file:
         for line in _file:
             urls.append(line)
-    # print(urls)
     url_dict: Dict[int, List[str]] = {}
     for ind in range(m):
         for elem in range(0, n, ind + 1):
@@ -44,10 +46,10 @@ def send_requests(file: str, m: int, n: int = 10):
         )
         for ind in range(m)
     ]
-    for th in threads:
-        th.start()
-    for th in threads:
-        th.join()
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
 
 
 if __name__ == "__main__":

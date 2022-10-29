@@ -42,4 +42,3 @@ class Client:
             self.connection.close()
         except socket.error as err:
             raise ClientError(f"Error. Do not close the connection - {err}")
-

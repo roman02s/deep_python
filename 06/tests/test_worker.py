@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import pytest
 
 from Worker.Worker import Worker
-import static.static_data as static_data
+from static import static_data
 
 
 def test_parser_url_empty():
@@ -16,7 +16,7 @@ def test_parser_url_empty():
 ])
 def test_parser_url(test_file, result_parsing):
     test_worker = Worker()
-    with open(test_file, "r") as file:
+    with open(test_file, "r", encoding="utf-8") as file:
         html = file.read()
         soup = BeautifulSoup(html, "html5lib")
         test_worker.soup_text = soup.text

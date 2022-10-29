@@ -15,7 +15,8 @@ class Server(asyncio.Protocol):
         super().__init__()
         self._buffer: bytes = b""
 
-    def connection_made(self, transport: asyncio.transports.BaseTransport) -> None:
+    def connection_made(self,
+                        transport: asyncio.transports.BaseTransport) -> None:
         self.transport = transport
 
     def data_received(self, data: bytes) -> None:
@@ -47,7 +48,7 @@ class Server(asyncio.Protocol):
     def worker_processing(url: str) -> Optional[str]:
         worker = Worker(url)
         return worker.fetch_url()
-        
+
 
 def run_server(host: str, port: int):
     loop = asyncio.get_event_loop()
