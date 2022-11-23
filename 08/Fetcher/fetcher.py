@@ -5,11 +5,10 @@ import aiohttp
 
 async def fetch(result_data: List,
                 session: aiohttp.ClientSession,
-                async_queue: asyncio,
+                async_queue: asyncio.Queue,
                 ):
     while True:
         url = await async_queue.get()
-
         try:
             async with session.get(url) as resp:
                 data: bytes = await resp.read()
