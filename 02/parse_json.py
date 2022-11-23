@@ -8,6 +8,8 @@ def parse_json(json_str: str,
                keyword_callback: Callable[[str, str], None] = None):
     """Парсинг json строки json_str по списку полей required_fields,
     списку имен keywords и функции-обработчика имени keyword_callback"""
+    if keyword_callback is None:
+        return
     try:
         json_doc: dict = json.loads(json_str)
     except json.decoder.JSONDecodeError as json_error:
