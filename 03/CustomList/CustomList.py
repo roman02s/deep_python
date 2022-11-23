@@ -55,7 +55,7 @@ class CustomList(list):
         return self._sum(self) > self._sum(other)
 
     def __eq__(self, other: TypeList) -> bool:
-        return self._sum(self) == self._sum(other)
+        return all([x - y == 0 for x, y in zip(self, other)])
 
     def __ne__(self, other: TypeList) -> bool:
-        return self._sum(self) != self._sum(other)
+        return any([x - y != 0 for x, y in zip(self, other)])
