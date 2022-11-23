@@ -18,6 +18,8 @@ class LRUCache:
 
     def set(self, key: Hashable, value: Any) -> None:
         if key in self.cache and self.cache[key] == value:
+            self.lru[key] = self.time_
+            self.time_ += 1
             return
         if len(self.cache) >= self.limit:
             old_key = min(self.lru.keys(), key=lambda k: self.lru[k])
