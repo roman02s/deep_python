@@ -1,0 +1,12 @@
+   ncalls  tottime  percall  cumtime  percall filename:lineno(function)
+        1    2.018    2.018    2.207    2.207 test_perfomance.py:12
+        1    2.153    2.153    2.404    2.404 test_perfomance.py:16
+        1    0.019    0.019    6.860    6.860 test_perfomance.py:20
+
+
+Time of create plans: 21.673251152038574 seconds
+Time of create slot_plans: 21.245333194732666 seconds
+Time of create weakref_plans: 21.99602508544922 seconds
+Time of del plans: 0.05445694923400879 seconds
+Time of del slot_plans: 0.027451038360595703 seconds
+Time of del weakref_plans: 0.13150906562805176 seconds
