@@ -1,6 +1,7 @@
 import sys
 import cProfile
 import pstats
+from pstats import SortKey
 import time
 import gc
 from memory_profiler import profile
@@ -36,7 +37,6 @@ def test_perfomance(n: int):
     end_ts = time.time()
     print(f"Time of del weakref_plans: {end_ts - start_ts} seconds")
 
-
     gc.enable()
 
     return None
@@ -49,4 +49,4 @@ if __name__ == "__main__":
     test_perfomance(1_00_000)
     pr.disable()
 
-    ps = pstats.Stats(pr, stream=sys.stdout).sort_stats().print_stats()
+    ps = pstats.Stats(pr, stream=sys.stdout).sort_stats(SortKey.CUMULATIVE).print_stats(20)
