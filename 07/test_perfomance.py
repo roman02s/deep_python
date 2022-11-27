@@ -23,14 +23,19 @@ def matrix_2() -> List[List]:
     return generate_matrix(M, K, 0)
 
 
-start_ts = time.time()
-res_python = Matrix_py(matrix_1()) * Matrix_py(matrix_2())
-end_ts = time.time()
-print(f"Time of execution of python matrix_mul is {end_ts - start_ts} seconds")
-res_python = res_python.to_list()
+def main():
+    start_ts = time.time()
+    res_python = Matrix_py(matrix_1()) * Matrix_py(matrix_2())
+    end_ts = time.time()
+    print(f"Time of execution of python matrix_mul is {end_ts - start_ts} seconds")
+    res_python = res_python.to_list()
 
-start_ts = time.time()
-res_cython = Matrix.matrix_mul(matrix_1(), matrix_2())
-end_ts = time.time()
-print(f"Time of execution of cython matrix_mul is {end_ts - start_ts} seconds")
-assert res_cython == res_python
+    start_ts = time.time()
+    res_cython = Matrix.matrix_mul(matrix_1(), matrix_2())
+    end_ts = time.time()
+    print(f"Time of execution of cython matrix_mul is {end_ts - start_ts} seconds")
+    assert res_cython == res_python
+
+
+if __name__ == "__main__":
+    main()
